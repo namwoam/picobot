@@ -26,7 +26,7 @@ class LiteLLMProvider(LLMProvider):
     """
     LLM provider using LiteLLM for multi-provider support.
     
-    Supports OpenRouter, Anthropic, OpenAI, Gemini, MiniMax, and many other providers through
+    Supports OpenRouter, Anthropic, OpenAI, Gemini, and other providers through
     a unified interface.  Provider-specific logic is driven by the registry
     (see providers/registry.py) — no if-elif chains needed here.
     """
@@ -66,7 +66,7 @@ class LiteLLMProvider(LLMProvider):
         if not spec:
             return
         if not spec.env_key:
-            # OAuth/provider-only specs (for example: openai_codex)
+            # Specs without env_key (e.g. direct/custom providers)
             return
 
         # Gateway/local overrides existing env; standard provider doesn't
@@ -106,7 +106,7 @@ class LiteLLMProvider(LLMProvider):
 
     @staticmethod
     def _canonicalize_explicit_prefix(model: str, spec_name: str, canonical_prefix: str) -> str:
-        """Normalize explicit provider prefixes like `github-copilot/...`."""
+        """Normalize explicit provider prefixes."""
         if "/" not in model:
             return model
         prefix, remainder = model.split("/", 1)
